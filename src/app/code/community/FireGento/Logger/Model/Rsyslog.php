@@ -66,7 +66,7 @@ class FireGento_Logger_Model_Rsyslog extends FireGento_Logger_Model_Abstract
     /**
      * @var array Contains configuration options.
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Builds and returns the full URL where the Log messages will be sent.
@@ -93,14 +93,14 @@ class FireGento_Logger_Model_Rsyslog extends FireGento_Logger_Model_Abstract
         $aUrlParts = parse_url(Mage::getBaseUrl());
         return new SyslogMessage(
             $this->_formatter->format($event, $this->_enableBacktrace),
+            strtotime($event->getTimestamp()),
             self::DEFAULT_FACILITY,
             $event->getPriority(),
-            strtotime($event->getTimestamp()),
-            array(
+            [
                 'HostName'    => gethostname(),
                 'FQDN'        => $aUrlParts['host'],
                 'ProcessName' => $this->_options['AppName'],
-            )
+            ]
         );
     }
 

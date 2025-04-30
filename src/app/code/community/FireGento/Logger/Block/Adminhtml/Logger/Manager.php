@@ -31,7 +31,7 @@ class FireGento_Logger_Block_Adminhtml_Logger_Manager extends Mage_Core_Block_Te
      * Local store of the list of modules
      * @var array
      */
-    protected $_lists = array();
+    protected $_lists = [];
 
     public function _construct()
     {
@@ -66,7 +66,7 @@ class FireGento_Logger_Block_Adminhtml_Logger_Manager extends Mage_Core_Block_Te
             $exists = $exists ? 'yes' : 'no';
             $o->setConfigExists($exists);
             if(!array_key_exists($o->getCodePool(), $this->_lists)) {
-                $this->_lists[$o->getCodePool()] = array();
+                $this->_lists[$o->getCodePool()] = [];
             }
             $this->_lists[$o->getCodePool()][] = $o->toArray();
         }
@@ -78,7 +78,6 @@ class FireGento_Logger_Block_Adminhtml_Logger_Manager extends Mage_Core_Block_Te
      */
     public function getModules()
     {
-        $modules = array_merge($this->_lists['local'], $this->_lists['community']);
-        return $modules;
+        return array_merge($this->_lists['local'], $this->_lists['community']);
     }
 }

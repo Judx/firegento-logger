@@ -72,42 +72,42 @@ class FireGento_Logger_Block_Adminhtml_Logger_Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('id', array(
+        $this->addColumn('id', [
             'header' => Mage::helper('firegento_logger')->__('ID'),
             'align' => 'right',
             'width' => '50px',
             'index' => 'entity_id',
-        ));
+        ]);
 
-        $this->addColumn('message', array(
+        $this->addColumn('message', [
             'header' => Mage::helper('firegento_logger')->__('Message'),
             'align' => 'left',
             'index' => 'message',
-        ));
+        ]);
 
-        $this->addColumn('timestamp', array(
+        $this->addColumn('timestamp', [
             'header' => Mage::helper('firegento_logger')->__('Timestamp'),
             'type' => 'datetime',
             'align' => 'left',
             'index' => 'timestamp',
-        ));
+        ]);
 
-        $this->addColumn('advanced_info', array(
+        $this->addColumn('advanced_info', [
             'header' => Mage::helper('firegento_logger')->__('Advanced Info'),
             'align' => 'left',
             'index' => 'advanced_info',
-            'frame_callback'=> array($this, 'decorateAdvancedInfo')
-        ));
+            'frame_callback'=> $this->decorateAdvancedInfo(...)
+        ]);
 
-        $this->addColumn('severity', array(
+        $this->addColumn('severity', [
             'header' => Mage::helper('firegento_logger')->__('Log Level'),
             'align' => 'left',
             'index' => 'severity',
             'type' => 'options',
             'width' => '120px',
             'options' => $this->getSeverityOptions(),
-            'frame_callback' => array($this, 'decorateSeverity')
-        ));
+            'frame_callback' => $this->decorateSeverity(...)
+        ]);
 
         return parent::_prepareColumns();
     }
@@ -121,11 +121,11 @@ class FireGento_Logger_Block_Adminhtml_Logger_Grid
     {
         $this->setMassactionIdField('log_id');
         $this->getMassactionBlock()->setFormFieldName('log');
-        $this->getMassactionBlock()->addItem('delete', array(
+        $this->getMassactionBlock()->addItem('delete', [
             'label' => Mage::helper('firegento_logger')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('firegento_logger')->__('Are you sure?')
-        ));
+        ]);
         return $this;
     }
 
@@ -139,22 +139,11 @@ class FireGento_Logger_Block_Adminhtml_Logger_Grid
     public function decorateSeverity($value, $row)
     {
         $class = '';
-        switch ($row->getSeverity()) {
-            case Zend_Log::EMERG:
-            case Zend_Log::ALERT:
-            case Zend_Log::CRIT:
-            case Zend_Log::ERR:
-                $class = 'grid-severity-critical';
-                break;
-            case Zend_Log::WARN:
-            case Zend_Log::NOTICE:
-            case Zend_Log::INFO:
-            case Zend_Log::DEBUG:
-                $class = 'grid-severity-minor';
-                break;
-            default:
-                $class = 'grid-severity-critical';
-        }
+        $class = match ($row->getSeverity()) {
+            Zend_Log::EMERG, Zend_Log::ALERT, Zend_Log::CRIT, Zend_Log::ERR => 'grid-severity-critical',
+            Zend_Log::WARN, Zend_Log::NOTICE, Zend_Log::INFO, Zend_Log::DEBUG => 'grid-severity-minor',
+            default => 'grid-severity-critical',
+        };
 
         return '<span class="' . $class . '"><span>' . $value . '</span></span>';
     }
@@ -177,7 +166,7 @@ class FireGento_Logger_Block_Adminhtml_Logger_Grid
      */
     public function getSeverityOptions()
     {
-        return array(
+        return [
             Zend_Log::EMERG => $this->_helper->__('Emergency'),
             Zend_Log::ALERT => $this->_helper->__('Alert'),
             Zend_Log::CRIT => $this->_helper->__('Critical'),
@@ -186,7 +175,7 @@ class FireGento_Logger_Block_Adminhtml_Logger_Grid
             Zend_Log::NOTICE => $this->_helper->__('Notice'),
             Zend_Log::INFO => $this->_helper->__('Info'),
             Zend_Log::DEBUG => $this->_helper->__('Debug'),
-        );
+        ];
     }
 
     /**
@@ -198,6 +187,6 @@ class FireGento_Logger_Block_Adminhtml_Logger_Grid
      */
     public function getRowUrl($item)
     {
-        return $this->getUrl('*/*/view', array('loggerentry_id' => $item->getId()));
+        return $this->getUrl('*/*/view', ['loggerentry_id' => $item->getId()]);
     }
 }

@@ -38,10 +38,10 @@ class FireGento_Logger_Model_System_Config_Source_Curlmethods
     {
         $helper = Mage::helper('firegento_logger');
 
-        return array(
-            array('label' => $helper->__('sync'), 'value' => 'sync'),
-            array('label' => $helper->__('async (default)'), 'value' => 'async'),
-            array('label' => $helper->__('exec'), 'value' => 'exec'),
-        );
+        return [
+            ['label' => $helper->__('sync'), 'value' => 'sync'],
+            ['label' => $helper->__('async (default)'), 'value' => 'async'],
+            ['label' => $helper->__('exec'), 'value' => 'exec'],
+        ];
     }
 }

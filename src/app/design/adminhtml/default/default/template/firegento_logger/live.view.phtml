@@ -65,7 +65,7 @@
             }
 
             this.running = true;
-            new Ajax.Request('<?php echo $this->getUrl('adminhtml/logger/liveViewAjax', array('_secure' => Mage::app()->getRequest()->isSecure())) ?>',
+            new Ajax.Request('<?php echo $this->getUrl('adminhtml/logger/liveViewAjax', ['_secure' => Mage::app()->getRequest()->isSecure()]) ?>',
                 {
                     method: 'get',
                     parameters: { position: this.position, logFile: this.currentLogFile },

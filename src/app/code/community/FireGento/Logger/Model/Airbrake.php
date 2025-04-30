@@ -47,10 +47,10 @@ class FireGento_Logger_Model_Airbrake extends Zend_Log_Writer_Abstract
         }
 
 
-        $options = array();
+        $options = [];
         // REQUEST_URI is not available in the CLI context
         if (isset($_SERVER['REQUEST_URI'])) {
-            $requestUri = explode("/", $_SERVER['REQUEST_URI']);
+            $requestUri = explode("/", (string) $_SERVER['REQUEST_URI']);
             $options['action'] = array_pop($requestUri);
             $options['component'] = implode('/', array_slice($requestUri, -2));
         } else {
@@ -58,7 +58,7 @@ class FireGento_Logger_Model_Airbrake extends Zend_Log_Writer_Abstract
             $options['component'] = $_SERVER['PHP_SELF'];
         }
 
-        $projectRoot = explode('/', $_SERVER['PHP_SELF']);
+        $projectRoot = explode('/', (string) $_SERVER['PHP_SELF']);
         array_pop($projectRoot);
         $options['projectRoot'] = implode('/', $projectRoot) . '/';
         $options['host'] = $helper->getLoggerConfig('airbrake/host');
@@ -84,7 +84,7 @@ class FireGento_Logger_Model_Airbrake extends Zend_Log_Writer_Abstract
 
     protected function isDisabled()
     {
-        if (strlen(trim($this->_apiKey)) == 0) {
+        if (strlen(trim((string) $this->_apiKey)) == 0) {
             return true;
         }
         return false;
@@ -95,7 +95,7 @@ class FireGento_Logger_Model_Airbrake extends Zend_Log_Writer_Abstract
         if ($this->isDisabled()) {
             return;
         }
-        $backtraceLines = explode("\n", $reportData[1]);
+        $backtraceLines = explode("\n", (string) $reportData[1]);
         $backtraces = $this->formatStackTraceArray($backtraceLines);
 
         $this->client->notifyOnError($reportData[0], $backtraces);
@@ -120,7 +120,7 @@ class FireGento_Logger_Model_Airbrake extends Zend_Log_Writer_Abstract
         $errorMessage = array_shift($messageArray);
         $backTrace = array_slice(debug_backtrace(), $backtraceLinesToSkip);
 
-        $matches = array();
+        $matches = [];
         if (preg_match('/exception \'(.*)\' with message \'(.*)\' in .*/', $errorMessage, $matches)) {
             $errorMessage = $matches[2];
             $errorClass = $matches[1];
@@ -131,11 +131,11 @@ class FireGento_Logger_Model_Airbrake extends Zend_Log_Writer_Abstract
 
         $notice = new \Airbrake\Notice;
         $notice->load(
-            array(
+            [
                 'errorClass' => $errorClass,
                 'backtrace' => $backTrace,
                 'errorMessage' => $errorMessage,
-            )
+            ]
         );
 
         $this->client->notify($notice);
@@ -147,11 +147,11 @@ class FireGento_Logger_Model_Airbrake extends Zend_Log_Writer_Abstract
      */
     protected function formatStackTraceArray($backtraceLines)
     {
-        $backtraces = array();
+        $backtraces = [];
 
         foreach ($backtraceLines as $backtrace) {
-            $temp = array();
-            $parts = explode(': ', $backtrace);
+            $temp = [];
+            $parts = explode(': ', (string) $backtrace);
 
             if (isset($parts[1])) {
                 $temp['function'] = $parts[1];

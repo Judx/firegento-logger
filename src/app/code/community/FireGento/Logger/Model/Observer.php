@@ -91,11 +91,11 @@ class FireGento_Logger_Model_Observer extends Varien_Object
     {
         $date = Mage::getModel('core/date')->gmtTimestamp() - (60 * 60 * 24 * $days);
 
-        $oldFiles = array();
+        $oldFiles = [];
         $scanDir = new Varien_Io_File();
         $scanDir->cd($dir);
         foreach ($scanDir->ls(Varien_Io_File::GREP_FILES) as $oldFile) {
-            if (stripos($oldFile['text'], $filename) != false && strtotime($oldFile['mod_date']) < $date) {
+            if (stripos((string) $oldFile['text'], $filename) != false && strtotime((string) $oldFile['mod_date']) < $date) {
                 $oldFiles[] = $oldFile;
             }
         }
@@ -117,9 +117,8 @@ class FireGento_Logger_Model_Observer extends Varien_Object
         if (extension_loaded('zlib')) {
             $extension = '.gz';
         }
-        $filename = $filename . "_" . $date . $extension;
 
-        return $filename;
+        return $filename . "_" . $date . $extension;
     }
 
     /**
@@ -138,8 +137,6 @@ class FireGento_Logger_Model_Observer extends Varien_Object
      * to enable javascript logging for all following js code
      *
      * the alternative would be to rewrite html/head or change the template files, which is both worse ;)
-     *
-     * @param Varien_Event_Observer $observer
      */
     public function addLoggerJs(Varien_Event_Observer $observer)
     {
@@ -164,7 +161,6 @@ class FireGento_Logger_Model_Observer extends Varien_Object
     /**
      * Predispatch controller action and before cron job
      *
-     * @param Varien_Event_Observer $observer
      * @return void
      */
     public function initLoggerClient(Varien_Event_Observer $observer)

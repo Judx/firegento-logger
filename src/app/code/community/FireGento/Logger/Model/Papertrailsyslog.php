@@ -59,15 +59,14 @@ class FireGento_Logger_Model_Papertrailsyslog extends FireGento_Logger_Model_Rsy
         Mage::helper('firegento_logger')->addEventMetadata($event, null, $enableBacktrace);
         $message = '[' . $event->getPriorityName() . ']';
         $message .= ' [' . $event->getStoreCode() . ']';
-        foreach (array('getUserAgent', 'getRequestUri', 'getRequestData', 'getRemoteIp', 'getHttpUserAgent', 'getRemoteAddress') as $method) {
-            if (is_callable(array($event, $method)) && $event->$method()) {
+        foreach (['getUserAgent', 'getRequestUri', 'getRequestData', 'getRemoteIp', 'getHttpUserAgent', 'getRemoteAddress'] as $method) {
+            if (is_callable([$event, $method]) && $event->$method()) {
                 $message .= '[' . substr($method, 3) . ':' . $event->$method() . '] ';
             }
         }
         $message .= ' ' . $event->getTimeElapsed() . '';
         $message .= ' ' . $event->getMessage();
-        $message .= ($event->getBacktrace() ? ' ' . $event->getBacktrace() : ' ');
-        return $message;
+        return $message . $event->getBacktrace() ? ' ' . $event->getBacktrace() : ' ';
     }
 
     /**
@@ -76,15 +75,16 @@ class FireGento_Logger_Model_Papertrailsyslog extends FireGento_Logger_Model_Rsy
      * @param  FireGento_Logger_Model_Event $event A Magento Log Event.
      * @return string A string representing the message.
      */
+    #[\Override]
     protected function buildSysLogMessage($event)
     {
         $message = $this->BuildStringMessage($event, $this->_enableBacktrace);
 
         return new FireGento_Logger_Model_Papertrail_PapertrailSyslogMessage(
             $message,
+            strtotime($event->getTimestamp()),
             16,
             $event->getPriority(),
-            strtotime($event->getTimestamp()),
             [
                 'HostName' => sprintf(
                     '%s %s/%s',

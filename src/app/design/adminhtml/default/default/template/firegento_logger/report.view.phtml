@@ -44,7 +44,7 @@
     });
     $('report_submit').observe('click', function(event) {
         $("log_output").innerHTML = '<?php echo $this->__('Loading Report...'); ?>';
-        new Ajax.Request('<?php echo $this->getUrl('adminhtml/logger/reportAjax', array('_secure' => Mage::app()->getRequest()->isSecure())) ?>',
+        new Ajax.Request('<?php echo $this->getUrl('adminhtml/logger/reportAjax', ['_secure' => Mage::app()->getRequest()->isSecure()]) ?>',
             {
                 method: 'get',
                 parameters: { "report_id": $('report_id').getValue() },

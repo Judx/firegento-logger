@@ -40,26 +40,12 @@ class FireGento_Logger_Model_Chromelogger extends FireGento_Logger_Model_Abstrac
         $message  = $this->_formatter->format($event);
 
         if ($priority !== false) {
-            switch ($priority)
-            {
-                case Zend_Log::EMERG:
-                case Zend_Log::ALERT:
-                case Zend_Log::CRIT:
-                case Zend_Log::ERR:
-                    ChromePhp::error($message);
-                    break;
-                case Zend_Log::WARN:
-                    ChromePhp::warn($message);
-                    break;
-                case Zend_Log::NOTICE:
-                case Zend_Log::INFO:
-                case Zend_Log::DEBUG:
-                    ChromePhp::info($message);
-                    break;
-                default:
-                    Mage::log('Unknown loglevel at ' . __CLASS__);
-                    break;
-            }
+            match ($priority) {
+                Zend_Log::EMERG, Zend_Log::ALERT, Zend_Log::CRIT, Zend_Log::ERR => ChromePhp::error($message),
+                Zend_Log::WARN => ChromePhp::warn($message),
+                Zend_Log::NOTICE, Zend_Log::INFO, Zend_Log::DEBUG => ChromePhp::info($message),
+                default => Mage::log('Unknown loglevel at ' . self::class),
+            };
         } else {
             Mage::log('Attached message event has no priority - skipping !');
         }

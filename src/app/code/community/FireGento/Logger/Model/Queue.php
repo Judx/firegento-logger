@@ -31,12 +31,12 @@ class FireGento_Logger_Model_Queue extends Zend_Log_Writer_Abstract
     /**
      * @var Zend_Log_Writer_Abstract[]
      */
-    protected $_writers = array();
+    protected $_writers = [];
 
     /**
      * @var array
      */
-    private $_loggerCache = array();
+    private $_loggerCache = [];
 
     /**
      * @var bool
@@ -184,7 +184,7 @@ class FireGento_Logger_Model_Queue extends Zend_Log_Writer_Abstract
     {
         $this->_formatter = self::getFormatter(true);
         foreach ($this->_writers as $writer) {
-            if (get_class($writer) == 'Zend_Log_Writer_Stream') {
+            if ($writer::class == 'Zend_Log_Writer_Stream') {
                 $writer->setFormatter(self::getFormatter(false));
             } else {
                 $writer->setFormatter(self::getFormatter(true));

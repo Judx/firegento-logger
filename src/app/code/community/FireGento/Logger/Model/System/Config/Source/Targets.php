@@ -30,7 +30,7 @@ class FireGento_Logger_Model_System_Config_Source_Targets
     /**
      * @var array Options
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Retrieve all targets as option arry
@@ -41,9 +41,9 @@ class FireGento_Logger_Model_System_Config_Source_Targets
     {
         if (!$this->_options) {
             foreach (Mage::app()->getConfig()->getNode('global/log/core/writer_models')->children() as $writer) {
-                $module = isset($writer->label['module']) ? $writer->label['module'] : 'firegento_logger';
+                $module = $writer->label['module'] ?? 'firegento_logger';
                 $label = Mage::helper($module)->__((string)$writer->label);
-                $this->_options[] = array('label' => $label, 'value' => $writer->getName());
+                $this->_options[] = ['label' => $label, 'value' => $writer->getName()];
             }
         }
 

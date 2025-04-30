@@ -33,36 +33,36 @@ class FireGento_Logger_Block_Adminhtml_System_Config_Targetmap
      */
     protected function _prepareToRender()
     {
-        $this->addColumn('pattern', array(
+        $this->addColumn('pattern', [
             'label' => Mage::helper('firegento_logger')->__('Pattern'),
             'style' => 'width:200px',
-        ));
+        ]);
 
         $targetRenderer = new FireGento_Logger_Block_Adminhtml_System_Config_Renderer_Select;
         $targetRenderer->setValues(
             Mage::getSingleton('firegento_logger/system_config_source_targets')->toOptionArray()
         );
-        $this->addColumn('target', array(
+        $this->addColumn('target', [
             'label' => Mage::helper('firegento_logger')->__('Target'),
             'style' => 'width:180px',
             'renderer' => $targetRenderer,
-        ));
+        ]);
 
         $btRenderer = new FireGento_Logger_Block_Adminhtml_System_Config_Renderer_Select;
         $btRenderer->setValues(Mage::getSingleton('adminhtml/system_config_source_yesno')->toOptionArray());
-        $this->addColumn('backtrace', array(
+        $this->addColumn('backtrace', [
             'label' => Mage::helper('firegento_logger')->__('Backtrace'),
             'style' => 'width:60px',
             'renderer' => $btRenderer,
-        ));
+        ]);
 
         $somRenderer = new FireGento_Logger_Block_Adminhtml_System_Config_Renderer_Select;
         $somRenderer->setValues(Mage::getSingleton('adminhtml/system_config_source_yesno')->toOptionArray());
-        $this->addColumn('stop_on_match', array(
+        $this->addColumn('stop_on_match', [
             'label' => Mage::helper('firegento_logger')->__('Stop On Match'),
             'style' => 'width:60px',
             'renderer' => $somRenderer,
-        ));
+        ]);
 
         $this->_addButtonLabel = Mage::helper('firegento_logger')->__('Add Target Rule');
     }

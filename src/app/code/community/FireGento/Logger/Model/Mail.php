@@ -103,15 +103,15 @@ class FireGento_Logger_Model_Mail extends Zend_Log_Writer_Mail
                 case "0": // use Smtp transport
                     // fall-through intended
                 default:
-                    $smtpConfig = array(
+                    $smtpConfig = [
                         'auth'     => 'login',
                         'username' => $helper->getLoggerConfig('mailconfig/username'),
                         'password' => $helper->getLoggerConfig('mailconfig/password')
-                    );
+                    ];
 
                     // Reset config array if username is empty
                     if (empty($smtpConfig['username'])) {
-                        $smtpConfig = array();
+                        $smtpConfig = [];
                     }
 
                     $transport = new Zend_Mail_Transport_Smtp(

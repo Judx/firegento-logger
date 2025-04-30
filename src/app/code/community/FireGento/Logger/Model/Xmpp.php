@@ -33,14 +33,14 @@ class FireGento_Logger_Model_Xmpp extends FireGento_Logger_Model_Abstract
      *
      * @var array
      */
-    protected $_eventsToSend = array();
+    protected $_eventsToSend = [];
 
     /**
      * Array of xmpp connection information. default to gtalk/gmail info
      *
      * @var array
      */
-    public $options = array(
+    public $options = [
         'host' => '',
         'port' => 5222,
         'user' => '',
@@ -48,7 +48,7 @@ class FireGento_Logger_Model_Xmpp extends FireGento_Logger_Model_Abstract
         'resource' => '',
         'server' => '',
         'recipient' => ''
-    );
+    ];
 
     /**
      * Class constructor

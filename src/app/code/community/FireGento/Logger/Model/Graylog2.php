@@ -32,7 +32,7 @@ class FireGento_Logger_Model_Graylog2 extends FireGento_Logger_Model_Abstract
     /**
      * @var array
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * @var GELFMessagePublisher
@@ -42,7 +42,7 @@ class FireGento_Logger_Model_Graylog2 extends FireGento_Logger_Model_Abstract
     /**
      * @var GELFMessagePublisher[]
      */
-    protected static $_publishers = array();
+    protected static $_publishers = [];
 
     /**
      * Use static method so all loggers share same publisher
@@ -97,7 +97,7 @@ class FireGento_Logger_Model_Graylog2 extends FireGento_Logger_Model_Abstract
 
             Mage::helper('firegento_logger')->addEventMetadata($event);
 
-            $message = trim($event->getMessage());
+            $message = trim((string) $event->getMessage());
 
             $eofMessageFirstLine = strpos($message, "\n");
             $shortMessage = (false === $eofMessageFirstLine) ? $message :
@@ -119,8 +119,8 @@ class FireGento_Logger_Model_Graylog2 extends FireGento_Logger_Model_Abstract
             $msg->setAdditional('store_code', $event->getStoreCode());
             $msg->setAdditional('time_elapsed', $event->getTimeElapsed());
             $msg->setHost(php_uname('n'));
-            foreach (array('getRequestMethod', 'getRequestUri', 'getRemoteIp', 'getHttpUserAgent','getHttpHost','getHttpCookie','getSessionData') as $method) {
-                if (is_callable(array($event, $method)) && $event->$method()) {
+            foreach (['getRequestMethod', 'getRequestUri', 'getRemoteIp', 'getHttpUserAgent','getHttpHost','getHttpCookie','getSessionData'] as $method) {
+                if (is_callable([$event, $method]) && $event->$method()) {
                     $msg->setAdditional(lcfirst(substr($method, 3)), $event->$method());
                 }
             }

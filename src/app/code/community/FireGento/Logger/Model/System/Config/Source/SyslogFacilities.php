@@ -32,9 +32,9 @@ class FireGento_Logger_Model_System_Config_Source_SyslogFacilities
      */
     public function toOptionArray()
     {
-        $facilities = array();
+        $facilities = [];
 
-        $constants = array(
+        $constants = [
             'LOG_AUTH',
             'LOG_AUTHPRIV',
             'LOG_CRON',
@@ -54,14 +54,14 @@ class FireGento_Logger_Model_System_Config_Source_SyslogFacilities
             'LOG_SYSLOG',
             'LOG_USER',
             'LOG_UUCP'
-        );
+        ];
 
         foreach ($constants as $constant) {
             if (defined($constant)) {
-                $facilities[] = array(
+                $facilities[] = [
                     'label'  => $constant,
                     'value' => constant($constant)
-                );
+                ];
             }
         }
 

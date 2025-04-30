@@ -61,9 +61,8 @@ class FireGento_Logger_Formatter_Advanced extends Zend_Log_Formatter_Simple
     public function format($event)
     {
         Mage::helper('firegento_logger')->addEventMetadata($event, '-', TRUE);
-
-        $output = preg_replace_callback('/%(\w+)%/', function ($match) use ($event) {
-            $value = isset($event[$match[1]]) ? $event[$match[1]] : '-';
+        return preg_replace_callback('/%(\w+)%/', function ($match) use ($event) {
+            $value = $event[$match[1]] ?? '-';
             if (is_bool($value)) {
                 return $value ? 'TRUE' : 'FALSE';
             } else if (is_scalar($value) || (is_object($value) && method_exists($value, '__toString'))) {
@@ -76,7 +75,6 @@ class FireGento_Logger_Formatter_Advanced extends Zend_Log_Formatter_Simple
                 return gettype($value);
             }
         }, $this->_format);
-        return $output;
     }
 
 }

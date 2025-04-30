@@ -39,10 +39,10 @@ class FireGento_Logger_Model_Syslog extends Zend_Log_Writer_Syslog
         /* @var $helper FireGento_Logger_Helper_Data */
         $helper = Mage::helper('firegento_logger');
 
-        $options = array(
+        $options = [
             'application' => $helper->getLoggerConfig('syslog/application') . $filename,
             'facility'    => $helper->getLoggerConfig('syslog/facility'),
-        );
+        ];
 
         parent::__construct($options);
     }

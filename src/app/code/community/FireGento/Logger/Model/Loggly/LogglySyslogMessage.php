@@ -34,6 +34,7 @@ class FireGento_Logger_Model_Loggly_LogglySyslogMessage extends SyslogMessage
      *
      * @return string The Message as a JSON object.
      */
+    #[\Override]
     protected function FormatMessage()
     {
         return $this->Message;
@@ -42,8 +43,9 @@ class FireGento_Logger_Model_Loggly_LogglySyslogMessage extends SyslogMessage
     /**
      * @return array
      */
+    #[\Override]
     public function GetMessageChunks()
     {
-        return array($this->FormatMessage());
+        return [$this->FormatMessage()];
     }
 }

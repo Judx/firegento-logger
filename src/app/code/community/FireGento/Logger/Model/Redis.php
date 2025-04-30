@@ -73,7 +73,7 @@ class FireGento_Logger_Model_Redis extends FireGento_Logger_Model_Abstract
     {
         Mage::helper('firegento_logger')->addEventMetadata($event, '-', $enableBacktrace);
 
-        $fields = array();
+        $fields = [];
         $fields['@timestamp'] = date('c', strtotime($event->getTimestamp()));
         $fields['@version'] = "1";
         $fields['level'] = $event->getPriority();

@@ -33,7 +33,7 @@
         <tbody>
             <?php $_modules = $this->getModules(); ?>
             <?php foreach ($_modules as $_module): ?>
-                <?php $logEnabled = (isset($_module['log_enabled']) ? $_module['log_enabled'] : true); ?>
+                <?php $logEnabled = ($_module['log_enabled'] ?? true); ?>
                 <tr id="<?php echo $_module['name']; ?>_row" class="<?php if(!$logEnabled): ?>no<?php endif;?>">
                     <td><?php echo $_module['name']; ?></td>
                     <td><?php echo $_module['path']; ?></td>

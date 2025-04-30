@@ -96,7 +96,7 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
         if ($this->_getData('backtrace') === TRUE) {
             if ($this->getBacktraceArray()) {
                 $basePath = dirname(Mage::getBaseDir()).'/'; // 1 level up in case deployed with symlinks from parent directory
-                $backtrace = array();
+                $backtrace = [];
                 foreach ($this->getBacktraceArray() as $index => $frame) {
                     // Set file
                     if (empty($frame['file'])) {
@@ -111,11 +111,11 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
                     }
 
                     $function = (isset($frame['class']) ? "{$frame['class']}{$frame['type']}":'').$frame['function'];
-                    $args = array();
+                    $args = [];
                     if (isset($frame['args'])) {
                         foreach ($frame['args'] as $value) {
                             $args[] = (is_object($value)
-                                ? get_class($value)
+                                ? $value::class
                                 : ( is_array($value)
                                     ? 'array('.count($value).')'
                                     : ( is_string($value)
@@ -145,12 +145,12 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
      */
     public function getEventDataArraySimple()
     {
-        return array(
+        return [
             'timestamp' => $this->getTimestamp(),
             'priority' => $this->getPriority(),
             'priorityName' => $this->getPriorityName(),
             'message' => $this->getMessage(),
-        );
+        ];
     }
 
     /**
@@ -160,7 +160,7 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
      */
     public function getEventDataArray()
     {
-        return array(
+        return [
             'timestamp' => $this->getTimestamp(),
             'priority' => $this->getPriority(),
             'priorityName' => $this->getPriorityName(),
@@ -180,7 +180,7 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
             'requestData' => $this->getRequestData(),
             'remoteAddress' => $this->getRemoteAddress(),
             'hostname' => $this->getHostname(),
-        );
+        ];
     }
 
     public function offsetSet($offset, $value) {
@@ -201,6 +201,6 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
             return $this->getBacktrace();
         }
         $offset = $this->_underscore($offset);
-        return isset($this->_data[$offset]) ? $this->_data[$offset] : null;
+        return $this->_data[$offset] ?? null;
     }
 }

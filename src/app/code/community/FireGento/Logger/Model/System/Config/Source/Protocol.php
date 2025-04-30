@@ -30,7 +30,7 @@ class FireGento_Logger_Model_System_Config_Source_Protocol
     /**
      * @var array Options
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Retrieve all targets as option arry
@@ -40,8 +40,8 @@ class FireGento_Logger_Model_System_Config_Source_Protocol
     public function toOptionArray()
     {
         if (!$this->_options) {
-            $this->_options[] = array('label' => 'UDP', 'value' => 'udp');
-            $this->_options[] = array('label' => 'TCP', 'value' => 'tcp');
+            $this->_options[] = ['label' => 'UDP', 'value' => 'udp'];
+            $this->_options[] = ['label' => 'TCP', 'value' => 'tcp'];
         }
 
         return $this->_options;

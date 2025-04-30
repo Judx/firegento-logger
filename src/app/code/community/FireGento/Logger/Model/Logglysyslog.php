@@ -67,7 +67,7 @@ class FireGento_Logger_Model_Logglysyslog extends FireGento_Logger_Model_Rsyslog
     {
         Mage::helper('firegento_logger')->addEventMetadata($event, null, $enableBacktrace);
 
-        $fields = array();
+        $fields = [];
         $fields['Token'] = sprintf('[%s@41058]', $this->_inputKey);
         $fields['Level'] = $event->getPriority();
         $fields['FileName'] = $event->getFile();
@@ -84,8 +84,8 @@ class FireGento_Logger_Model_Logglysyslog extends FireGento_Logger_Model_Rsyslog
             $fields['Backtrace'] = $event->getBacktrace();
         }
 
-        foreach (array('getRequestMethod', 'getRequestUri', 'getRemoteIp', 'getHttpUserAgent','getHttpHost','getHttpCookie','getSessionData') as $method) {
-            if (is_callable(array($event, $method)) && $event->$method()) {
+        foreach (['getRequestMethod', 'getRequestUri', 'getRemoteIp', 'getHttpUserAgent','getHttpHost','getHttpCookie','getSessionData'] as $method) {
+            if (is_callable([$event, $method]) && $event->$method()) {
                 $fields[lcfirst(substr($method, 3))] = $event->$method();
             }
         }
@@ -99,6 +99,7 @@ class FireGento_Logger_Model_Logglysyslog extends FireGento_Logger_Model_Rsyslog
      * @param  FireGento_Logger_Model_Event $event A Magento Log Event.
      * @return string A string representing the message.
      */
+    #[\Override]
     protected function buildSysLogMessage($event)
     {
         $message = $this->BuildJSONMessage($event, $this->_enableBacktrace);
@@ -108,9 +109,9 @@ class FireGento_Logger_Model_Logglysyslog extends FireGento_Logger_Model_Rsyslog
 
         return new FireGento_Logger_Model_Loggly_LogglySyslogMessage (
             $message,
+            strtotime($event->getTimestamp()),
             self::DEFAULT_FACILITY,
-            $event->getPriority(),
-            strtotime($event->getTimestamp())
+            $event->getPriority()
         );
     }
 }

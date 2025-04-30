@@ -28,6 +28,7 @@
  */
 class FireGento_Logger_Model_Papertrail_PapertrailSyslogMessage extends SyslogMessage
 {
+    #[\Override]
     public function GetMessageChunks()
     {
         $MessageTag = trim($this->GetTag());

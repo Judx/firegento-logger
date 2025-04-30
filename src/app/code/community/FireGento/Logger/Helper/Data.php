@@ -57,7 +57,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
             try {
                 $requestId = preg_replace('/\W/','',base64_encode(random_bytes(6)));
                 Mage::register('logger_request_id', $requestId);
-            } catch (Exception $e) {}
+            } catch (Exception) {}
         }
         return Mage::registry('logger_request_id');
     }
@@ -97,7 +97,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
         if ($this->_targetMap === null) {
             $targetMap = $this->getLoggerConfig('general/target_map');
             if ($targetMap && ($targetMap = @unserialize($targetMap))) {
-                $targets = array();
+                $targets = [];
                 foreach ($targetMap as $map) {
                     if (@preg_match('/^'.$map['pattern'].'$/', $filename)) {
                         $targets[$map['target']] = (int) $map['backtrace'];
@@ -139,7 +139,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
                 $priority = null;
             }
         }
-        if ( ! $configPath || ! strlen($priority)) {
+        if ( ! $configPath || ! strlen((string) $priority)) {
             $priority = $this->getLoggerConfig(self::XML_PATH_PRIORITY);
         }
         if ($priority !== null) {
@@ -192,7 +192,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
             $nextIsFirst = false;                        // Skip backtrace frames until we reach Mage::log(Exception)
             $recordBacktrace = false;
 
-            $backtraceFrames = array();
+            $backtraceFrames = [];
             if (version_compare(PHP_VERSION, '5.4.0') < 0) {
                 $debugBacktrace = debug_backtrace();
             } else {
@@ -216,7 +216,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
                         isset($frame['type'])
                         && $frame['type'] == '::'
                         && $frame['class'] == 'Mage'
-                        && substr($frame['function'], 0, 3) == 'log'
+                        && str_starts_with($frame['function'], 'log')
                     )
                 ) {
                     if (isset($frame['file']) && isset($frame['line'])) {
@@ -224,7 +224,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
                             ->setFile(str_replace($basePath, '', $frame['file']))
                             ->setLine($frame['line']);
                         if ($this->_maxBacktraceLines) {
-                            $backtraceFrames = array($frame);
+                            $backtraceFrames = [$frame];
                         } elseif ($nextIsFirst) {
                             break;
                         } else {
@@ -290,7 +290,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         // Fetch request data
-        $requestData = array();
+        $requestData = [];
         if (!empty($_GET)) {
             $requestData[] = '  GET|'.substr(@json_encode($this->filterSensibleData($_GET), $this->_prettyPrint), 0, $this->_maxDataLength);
         }
@@ -336,7 +336,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
     {
         if (is_array($data)) {
             foreach ($this->_keysToFilter as $key) {
-                $key = trim($key);
+                $key = trim((string) $key);
                 if ($key !== '') {
                     $subkeys = explode('.', $key);
                     $data = $this->filterDataFromMultidimensionalKey($data, $subkeys);
@@ -382,7 +382,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
 
         $notificationRulesSerialized = $this->getLoggerConfig('db/email_notification_rule');
         if (! $notificationRulesSerialized) {
-            return array();
+            return [];
         }
         $notificationRules = unserialize($notificationRulesSerialized);
 
@@ -400,7 +400,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
     public function getEventObjectFromArray($event)
     {
         // if more than one logger is active the first logger convert the array
-        if (is_object($event) && get_class($event) == get_class(Mage::getModel('firegento_logger/event'))) {
+        if (is_object($event) && $event::class == Mage::getModel('firegento_logger/event')::class) {
             return $event;
         }
         return Mage::getModel('firegento_logger/event')

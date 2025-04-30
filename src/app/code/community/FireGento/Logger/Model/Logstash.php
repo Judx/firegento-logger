@@ -65,7 +65,7 @@ class FireGento_Logger_Model_Logstash extends FireGento_Logger_Model_Abstract
     {
         Mage::helper('firegento_logger')->addEventMetadata($event, '-', $enableBacktrace);
 
-        $fields = array();
+        $fields = [];
         $fields['@timestamp'] = date('c', strtotime($event->getTimestamp()));
         $fields['@version'] = "1";
         $fields['Level'] = $event->getPriorityName();

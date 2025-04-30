@@ -36,11 +36,11 @@ class FireGento_Logger_Block_Adminhtml_System_Config_Renderer_Select
     protected function _toHtml()
     {
         $htmlId = $this->getColumnName() . '#{_id}';
-        $select = new Varien_Data_Form_Element_Select(array(
+        $select = new Varien_Data_Form_Element_Select([
             'html_id' => $htmlId,
             'no_span' => true,
             'name' => $this->getInputName(),
-        ));
+        ]);
         $select->addData($this->getColumn());
         $select->setForm(new Varien_Object());
         $select->setValues($this->getValues());
@@ -52,7 +52,7 @@ class FireGento_Logger_Block_Adminhtml_System_Config_Renderer_Select
               $(\"$htmlId\").setValue(\"#{{$this->getColumnName()}}\");
             </script>
         ";
-        return str_replace(array("\n", '"', '/'), array('', '\"', '\/'), $javascriptHtml);
+        return str_replace(["\n", '"', '/'], ['', '\"', '\/'], $javascriptHtml);
     }
 
 }

@@ -156,7 +156,7 @@ class FireGento_Logger_Adminhtml_LoggerController extends Mage_Adminhtml_Control
 
         $response = '';
         if ($updates != null) {
-            $response = Zend_Json::encode(array('text' => $updates, 'position' => $newPos));
+            $response = Zend_Json::encode(['text' => $updates, 'position' => $newPos]);
         }
 
         $this->getResponse()->setBody($response);
@@ -182,7 +182,7 @@ class FireGento_Logger_Adminhtml_LoggerController extends Mage_Adminhtml_Control
         $text = fread($handle, $filesize);
 
         $this->getResponse()->setBody(
-            Zend_Json::encode(array('text' => $text))
+            Zend_Json::encode(['text' => $text])
         );
     }
 

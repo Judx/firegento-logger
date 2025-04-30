@@ -40,7 +40,7 @@ class FireGento_Logger_Model_Stream extends Zend_Log_Writer_Stream
 
         $line = $this->_formatter->format($event);
 
-        if (false === @fwrite($this->_stream, $line)) {
+        if (false === @fwrite($this->_stream, (string) $line)) {
             //require_once 'Zend/Log/Exception.php';
             throw new Zend_Log_Exception("Unable to write to stream");
         }

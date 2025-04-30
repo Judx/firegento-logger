@@ -37,7 +37,7 @@ class FireGento_Logger_Model_Db extends Zend_Log_Writer_Db
         $resource = Mage::getSingleton('core/resource');
         $this->_db = $resource->getConnection('core_write');
         $this->_table = $resource->getTableName('firegento_logger/db_entry');
-        $this->_columnMap = array('severity' => 'priority', 'message' => 'message');
+        $this->_columnMap = ['severity' => 'priority', 'message' => 'message'];
         parent::__construct($this->_db, $this->_table, $this->_columnMap);
     }
 
@@ -87,7 +87,7 @@ class FireGento_Logger_Model_Db extends Zend_Log_Writer_Db
         if ($this->_columnMap === null) {
             $dataToInsert = $event;
         } else {
-            $dataToInsert = array();
+            $dataToInsert = [];
             foreach ($this->_columnMap as $columnName => $fieldKey) {
                 $dataToInsert[$columnName] = $event->getDataUsingMethod($fieldKey);
             }
@@ -129,7 +129,7 @@ class FireGento_Logger_Model_Db extends Zend_Log_Writer_Db
             return true;
         }
 
-        $result = preg_match("/$pattern/i", $loggerEntry->getMessage());
+        $result = preg_match("/$pattern/i", (string) $loggerEntry->getMessage());
         if ($result) {
             return true;
         }
@@ -155,14 +155,14 @@ class FireGento_Logger_Model_Db extends Zend_Log_Writer_Db
         $template->setData('sender_name', $name )
             ->setData('sender_email', $email);
 
-        $variables = array(
+        $variables = [
             'loggerentry_url' =>
-                Mage::getUrl('adminhtml/logger/view', array('loggerentry_id' => $loggerEntry->getId())),
+                Mage::getUrl('adminhtml/logger/view', ['loggerentry_id' => $loggerEntry->getId()]),
             'loggerentry' => $loggerEntry
-        );
+        ];
 
         $recipientsCsv = $rule['email_list_csv'];
-        $recipients = array_map('trim', explode(",", $recipientsCsv));
+        $recipients = array_map('trim', explode(",", (string) $recipientsCsv));
         $template->send($recipients, null, $variables);
     }
 }

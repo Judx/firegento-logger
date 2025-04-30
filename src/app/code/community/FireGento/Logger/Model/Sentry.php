@@ -51,7 +51,7 @@ class FireGento_Logger_Model_Sentry extends FireGento_Logger_Model_Abstract
 
     public function __construct($fileName = NULL)
     {
-        $this->_fileName = $fileName ? basename($fileName) : NULL;
+        $this->_fileName = $fileName ? basename((string) $fileName) : NULL;
     }
 
     /**
@@ -80,13 +80,13 @@ class FireGento_Logger_Model_Sentry extends FireGento_Logger_Model_Abstract
                 return FALSE;
             }
             require_once Mage::getBaseDir('lib') . DS . 'sentry' . DS . 'lib' . DS . 'Raven' . DS . 'Autoloader.php';
-            spl_autoload_register(array('Raven_Autoloader', 'autoload'), true, true);
+            spl_autoload_register(['Raven_Autoloader', 'autoload'], true, true);
             $options            = [
                 'trace'       => $this->_enableBacktrace,
                 'curl_method' => $helper->getLoggerConfig('sentry/curl_method'),
                 'prefixes'    => [BP],
             ];
-            if ($environment = trim($helper->getLoggerConfig('sentry/environment'))) {
+            if ($environment = trim((string) $helper->getLoggerConfig('sentry/environment'))) {
                 $options['environment'] = $environment;
             }
             self::$_ravenClient = new Raven_Client($dsn, $options);
@@ -95,7 +95,7 @@ class FireGento_Logger_Model_Sentry extends FireGento_Logger_Model_Abstract
             $error_handler = new Raven_ErrorHandler(self::$_ravenClient, false);
             $error_handler->registerShutdownFunction();
         }
-        return !!self::$_ravenClient;
+        return (bool) self::$_ravenClient;
     }
 
     /**
@@ -124,7 +124,7 @@ class FireGento_Logger_Model_Sentry extends FireGento_Logger_Model_Abstract
             if ( ! isset($event['priority']) || $event['priority'] === Zend_Log::ERR ) {
                 $this->_assumePriorityByMessage($event);
             }
-            $priority = isset($event['priority']) ? $event['priority'] : 3;
+            $priority = $event['priority'] ?? 3;
 
             //
             // Add extra data and tags
@@ -193,16 +193,16 @@ class FireGento_Logger_Model_Sentry extends FireGento_Logger_Model_Abstract
     protected function _assumePriorityByMessage(&$event)
     {
         if (
-            stripos($event['message'], "warn") === 0 ||
-            stripos($event['message'], "user warn") === 0
+            stripos((string) $event['message'], "warn") === 0 ||
+            stripos((string) $event['message'], "user warn") === 0
         ) {
             $event['priority'] = 4;
         }
         else if (
-            stripos($event['message'], "notice") === 0 ||
-            stripos($event['message'], "user notice") === 0 ||
-            stripos($event['message'], "strict notice") === 0 ||
-            stripos($event['message'], "deprecated") === 0
+            stripos((string) $event['message'], "notice") === 0 ||
+            stripos((string) $event['message'], "user notice") === 0 ||
+            stripos((string) $event['message'], "strict notice") === 0 ||
+            stripos((string) $event['message'], "deprecated") === 0
         ) {
             $event['priority'] = 5;
         }

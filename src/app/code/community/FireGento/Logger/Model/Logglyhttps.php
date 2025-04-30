@@ -56,7 +56,7 @@ class FireGento_Logger_Model_Logglyhttps extends FireGento_Logger_Model_Abstract
     /**
      * @var array Contains configuration options.
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Class constructor
@@ -88,7 +88,7 @@ class FireGento_Logger_Model_Logglyhttps extends FireGento_Logger_Model_Abstract
         /** @var $event FireGento_Logger_Model_Event */
         Mage::helper('firegento_logger')->addEventMetadata($event, null, $enableBacktrace);
 
-        $fields = array();
+        $fields = [];
         $fields['Level'] = $event->getPriority();
         $fields['FileName'] = $event->getFile();
         $fields['LineNumber'] = $event->getLine();
@@ -96,7 +96,7 @@ class FireGento_Logger_Model_Logglyhttps extends FireGento_Logger_Model_Abstract
         $fields['Pid'] = getmypid();
         $fields['TimeElapsed'] = $event->getTimeElapsed();
         $fields['Host'] = php_uname('n');
-        $fields['TimeStamp'] = date(DATE_ISO8601, strtotime($event->getTimestamp()));
+        $fields['TimeStamp'] = date(DATE_ISO8601, strtotime((string) $event->getTimestamp()));
         $fields['Facility'] = $this->_options['AppName'] . $this->_options['FileName'];
         $fields['Message'] = $event->getMessage();
 
@@ -104,8 +104,8 @@ class FireGento_Logger_Model_Logglyhttps extends FireGento_Logger_Model_Abstract
             $fields['Backtrace'] = $event->getBacktrace();
         }
 
-        foreach (array('getRequestMethod', 'getRequestUri', 'getRemoteIp', 'getHttpUserAgent','getHttpHost','getHttpCookie','getSessionData') as $method) {
-            if (is_callable(array($event, $method)) && $event->$method()) {
+        foreach (['getRequestMethod', 'getRequestUri', 'getRemoteIp', 'getHttpUserAgent','getHttpHost','getHttpCookie','getSessionData'] as $method) {
+            if (is_callable([$event, $method]) && $event->$method()) {
                 $fields[lcfirst(substr($method, 3))] = $event->$method();
             }
         }
@@ -129,11 +129,11 @@ class FireGento_Logger_Model_Logglyhttps extends FireGento_Logger_Model_Abstract
             $this->_logglyServer, $this->_logglyPath, $this->_inputKey));
 
         curl_setopt($curlHandler, CURLOPT_POST, 1);
-        curl_setopt($curlHandler, CURLOPT_HTTPHEADER, array(
+        curl_setopt($curlHandler, CURLOPT_HTTPHEADER, [
             'User Agents: Vanilla Logger Plugin',
             'Content-Type: application/json',
             'Content-Length: '.strlen($message)
-        ));
+        ]);
         curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $message);
         curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curlHandler, CURLOPT_TIMEOUT, (int) $this->_timeout);

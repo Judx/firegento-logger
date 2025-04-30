@@ -33,11 +33,12 @@ class FireGento_Logger_Model_System_Config_Source_Prioritydefault
      *
      * @return array Priorities
      */
+    #[\Override]
     public function toOptionArray()
     {
         $options = parent::toOptionArray();
         $helper = Mage::helper('firegento_logger');
-        array_unshift($options, array('label' => $helper->__('Default'), 'value' => 'default'));
+        array_unshift($options, ['label' => $helper->__('Default'), 'value' => 'default']);
 
         return $options;
     }

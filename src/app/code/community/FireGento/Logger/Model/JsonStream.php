@@ -53,7 +53,7 @@ class FireGento_Logger_Model_JsonStream extends Zend_Log_Writer_Stream
         $event = Mage::helper('firegento_logger')->getEventObjectFromArray($event);
         Mage::helper('firegento_logger')->addEventMetadata($event, NULL, $this->_enableBacktrace);
         $eventData = $event->getEventDataArray();
-        $eventData = array_filter($eventData, function ($var) { return $var !== null; });
+        $eventData = array_filter($eventData, fn($var) => $var !== null);
         $line = @json_encode($eventData);
 
         if (false === @fwrite($this->_stream, $line . PHP_EOL)) {
