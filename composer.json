@@ -9,5 +9,17 @@
   },
   "require": {
     "paragonie/random_compat": "^9.99"
+  },
+  "require-dev": {
+    "rector/rector": "^2.0"
+  },
+  "scripts": {
+    "rector:test": "vendor/bin/rector process --config .rector.php --dry-run",
+    "rector:fix": "vendor/bin/rector process --config .rector.php"
+
+  },
+  "scripts-descriptions": {
+    "rector:test": "Run rector",
+    "rector:fix": "Run rector and fix issues"
   }
 }
