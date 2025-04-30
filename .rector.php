@@ -26,7 +26,6 @@ return RectorConfig::configure()
     ])
     
     ->withSkipPath(__DIR__ . '/vendor')
-    ->withSkipPath(__DIR__ . '/src/lib')
 
     ->withRules([
         CodeQuality\BooleanNot\ReplaceMultipleBooleanNotRector::class,

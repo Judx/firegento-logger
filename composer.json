@@ -1,6 +1,8 @@
 {
   "name": "firegento/logger",
-  "license": ["GPL-3.0"],
+  "license": [
+    "GPL-3.0"
+  ],
   "type": "magento-module",
   "description": "FireGento Logger is an advanced alternative to log messages and errors to multiple targets.",
   "homepage": "https://github.com/firegento/firegento-logger",
@@ -16,10 +18,10 @@
   "scripts": {
     "rector:test": "vendor/bin/rector process --config .rector.php --dry-run",
     "rector:fix": "vendor/bin/rector process --config .rector.php"
-
   },
   "scripts-descriptions": {
     "rector:test": "Run rector",
     "rector:fix": "Run rector and fix issues"
-  }
+  },
+  "php": ">=8.0"
 }
